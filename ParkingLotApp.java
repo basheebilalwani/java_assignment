@@ -349,6 +349,12 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
         
             // Get the selected user type
             String userType = userTypes[userTypeSelection];
+
+            // Check if the vehicle number is already registered
+            if (isVehicleRegistered(vehicleNumber)) {
+                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " is already registered!");
+                return;
+            }
         
             switch (userType.toLowerCase()) {
                 case "student":
@@ -385,6 +391,14 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 		else if (slot < STUDENT_SLOTS + FACULTY_SLOTS) return facultySlots;
 		else return vipSlots;
 	}
+
+            // Method to check if the vehicle number is already registered
+        private boolean isVehicleRegistered(String vehicleNumber) {
+            return registeredStudents.contains(vehicleNumber) ||
+           registeredFaculty.contains(vehicleNumber) ||
+           registeredEmergency.contains(vehicleNumber) ||
+           registeredVIP.contains(vehicleNumber);
+}
 
     private boolean isVehicleAlreadyParked(String vehicleNumber) {
         return containsVehicle(studentSlots, vehicleNumber) ||
