@@ -91,43 +91,6 @@ public class ParkingLotApp extends JFrame {
         return button;
     }
 
-    private void registerVehicle() {
-        String userType = JOptionPane.showInputDialog(this, "Enter your user type (Student, Faculty, Emergency, VIP):");
-        String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
-
-        System.out.println("User  Type: " + userType); // Debug output
-    System.out.println("Vehicle Number: " + vehicleNumber); // Debug output
-
-        
-        if (userType == null || vehicleNumber == null || userType.trim().isEmpty() || vehicleNumber.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "User  type and vehicle number cannot be empty!");
-            return;
-        }
-
-        switch (userType.trim().toLowerCase()) {
-            case "student":
-                registeredStudents.add(vehicleNumber);
-                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Student.");
-                break;
-            case "faculty":
-                registeredFaculty.add(vehicleNumber);
-                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Faculty.");
-                break;
-            case "emergency":
-                registeredEmergency.add(vehicleNumber);
-                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Emergency.");
-                break;
-            case "vip":
-                registeredVIP.add(vehicleNumber);
-                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as VIP.");
-                break;
-            default:
-                JOptionPane.showMessageDialog(this, "Invalid user type. Please enter Student, Faculty, Emergency, or VIP.");
-                break;
-        }
-    }
-
-	
 	    private JButton createSearchButton() {
         JButton button = new JButton("Search Parking");
         button.setBackground(new Color(100, 149, 237));
@@ -351,6 +314,49 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 			}
 			updateStatusLabels();
 		}
+
+        private void registerVehicle() {
+            String[] userTypes = {"Student", "Faculty", "Emergency", "VIP"};
+            int userTypeSelection = JOptionPane.showOptionDialog(this, "Select your user type:", "User  Type Selection",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, userTypes, userTypes[0]);
+        
+            // Check if the user selected a type or canceled the dialog
+            if (userTypeSelection == JOptionPane.CLOSED_OPTION) {
+                return; // User closed the dialog
+            }
+        
+            String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
+        
+            if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
+                return;
+            }
+        
+            // Get the selected user type
+            String userType = userTypes[userTypeSelection];
+        
+            switch (userType.toLowerCase()) {
+                case "student":
+                    registeredStudents.add(vehicleNumber);
+                    JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Student.");
+                    break;
+                case "faculty":
+                    registeredFaculty.add(vehicleNumber);
+                    JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Faculty.");
+                    break;
+                case "emergency":
+                    registeredEmergency.add(vehicleNumber);
+                    JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Emergency.");
+                    break;
+                case "vip":
+                    registeredVIP.add(vehicleNumber);
+                    JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as VIP.");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Invalid user type. Please select a valid option.");
+                    break;
+            }
+        }
 
 	private int findOverflowSlot() {
 		int slot = findAvailableSlot(studentSlots);
