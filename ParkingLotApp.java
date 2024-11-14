@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ParkingLotApp extends JFrame {
     private static final int STUDENT_SLOTS = 54;
@@ -13,6 +15,12 @@ public class ParkingLotApp extends JFrame {
     private String[] facultySlots = new String[FACULTY_SLOTS];
     private String[] emergencySlots = new String[EMERGENCY_SLOTS];
     private String[] vipSlots = new String[VIP_SLOTS];
+
+    // Registration sets
+    private Set<String> registeredStudents = new HashSet<>();
+    private Set<String> registeredFaculty = new HashSet<>();
+    private Set<String> registeredEmergency = new HashSet<>();
+    private Set<String> registeredVIP = new HashSet<>();
 
     private JLabel studentStatusLabel, facultyStatusLabel, emergencyStatusLabel, vipStatusLabel;
     private JPanel mainPanel;
@@ -36,6 +44,7 @@ public class ParkingLotApp extends JFrame {
         JButton exitButton = createExitButton();
 		JButton viewStatusButton = createViewStatusButton(); // New button to view parking status
 		JButton searchButton = createSearchButton(); 
+        JButton registerButton = createRegisterButton(); // Button for registration
 
         // Status labels with improved styling
         studentStatusLabel = createStatusLabel("Student Slots Available: " + getAvailableSlots(studentSlots));
@@ -55,18 +64,69 @@ public class ParkingLotApp extends JFrame {
         mainPanel.add(exitButton);
 		mainPanel.add(viewStatusButton); 
 		mainPanel.add(searchButton);
+        mainPanel.add(registerButton); // Add registration button to the panel
 
         // Action Listeners
-        studentButton.addActionListener(e -> park("Student", studentSlots));
-        facultyButton.addActionListener(e -> park("Faculty", facultySlots));
-        emergencyButton.addActionListener(e -> park("Emergency", emergencySlots));
-        vipButton.addActionListener(e -> park("VIP", vipSlots));
+        studentButton.addActionListener(e -> park("Student", studentSlots, registeredStudents));
+        facultyButton.addActionListener(e -> park("Faculty", facultySlots, registeredFaculty));
+        emergencyButton.addActionListener(e -> park("Emergency", emergencySlots, registeredEmergency));
+        vipButton.addActionListener(e -> park("VIP", vipSlots, registeredVIP));
         exitButton.addActionListener(e -> exitParking());
 		viewStatusButton.addActionListener(e -> viewParkingStatus());
 		searchButton.addActionListener(e -> searchVehicleLocation()); 
+        registerButton.addActionListener(e -> registerVehicle()); // Register vehicle action
 
         add(mainPanel);
     }
+
+    private JButton createRegisterButton() {
+        JButton button = new JButton("Register Vehicle");
+        button.setBackground(new Color(60, 179, 113));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        button.setForeground(Color.WHITE);
+        button.setPreferredSize(new Dimension(200, 50));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
+        return button;
+    }
+
+    private void registerVehicle() {
+        String userType = JOptionPane.showInputDialog(this, "Enter your user type (Student, Faculty, Emergency, VIP):");
+        String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
+
+        System.out.println("User  Type: " + userType); // Debug output
+    System.out.println("Vehicle Number: " + vehicleNumber); // Debug output
+
+        
+        if (userType == null || vehicleNumber == null || userType.trim().isEmpty() || vehicleNumber.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "User  type and vehicle number cannot be empty!");
+            return;
+        }
+
+        switch (userType.trim().toLowerCase()) {
+            case "student":
+                registeredStudents.add(vehicleNumber);
+                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Student.");
+                break;
+            case "faculty":
+                registeredFaculty.add(vehicleNumber);
+                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Faculty.");
+                break;
+            case "emergency":
+                registeredEmergency.add(vehicleNumber);
+                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as Emergency.");
+                break;
+            case "vip":
+                registeredVIP.add(vehicleNumber);
+                JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " registered as VIP.");
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Invalid user type. Please enter Student, Faculty, Emergency, or VIP.");
+                break;
+        }
+    }
+
 	
 	    private JButton createSearchButton() {
         JButton button = new JButton("Search Parking");
@@ -243,13 +303,17 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 
 	//new
 
-    private void park(String userType, String[] slots) {
+    private void park(String userType, String[] slots, Set<String> registeredVehicles) {
         String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
         if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
             return;
         }
 
+        if (!registeredVehicles.contains(vehicleNumber)) {
+            JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " is not registered. Please register it first.");
+            return;
+        }
         if (isVehicleAlreadyParked(vehicleNumber)) {
             JOptionPane.showMessageDialog(this, "Vehicle No." + vehicleNumber + " is already parked.");
             return;
