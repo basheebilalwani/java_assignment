@@ -268,10 +268,16 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 
     private void park(String userType, String[] slots, Set<String> registeredVehicles) {
         String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
-        if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
-            return;
-        }
+       // Check if the user canceled the dialog
+    if (vehicleNumber == null) {
+        return; // User closed the dialog, do nothing
+    }
+
+    // Check if the vehicle number is empty
+    if (vehicleNumber.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
+        return;
+    }
 
         if (!registeredVehicles.contains(vehicleNumber)) {
             JOptionPane.showMessageDialog(this, "Vehicle No. " + vehicleNumber + " is not registered. Please register it first.");
@@ -327,10 +333,19 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
         
             String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
         
-            if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
-                return;
-            }
+            // Check if the user selected a type or canceled the dialog
+        if (userTypeSelection == JOptionPane.CLOSED_OPTION) {
+            return; // User closed the dialog
+        }
+        // Check if the user canceled the dialog or entered an empty vehicle number
+        if (vehicleNumber == null) {
+            return; // User closed the dialog, do nothing
+        }
+
+        if (vehicleNumber.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
+            return;
+        }
         
             // Get the selected user type
             String userType = userTypes[userTypeSelection];
@@ -407,7 +422,13 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 
    private void exitParking() {
     String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number to exit:");
-    if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
+    // Check if the user canceled the dialog
+    if (vehicleNumber == null) {
+        return; // User closed the dialog, do nothing
+    }
+
+    // Check if the vehicle number is empty
+    if (vehicleNumber.trim().isEmpty()) {
         JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
         return;
     }
@@ -439,11 +460,16 @@ private JPanel createParkingAreaPanel(String areaName, String[] slots, int colum
 		// Ask for the vehicle number directly
 		String vehicleNumber = JOptionPane.showInputDialog(this, "Enter your vehicle number:");
 
-		if (vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
-			return;
-		}
-
+		// Check if the user canceled the dialog
+        if (vehicleNumber == null) {
+            return; // User closed the dialog, do nothing
+        }
+    
+        // Check if the vehicle number is empty
+        if (vehicleNumber.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vehicle number cannot be empty!");
+            return;
+        }
 		// Check the vehicle number in all designations
 		String[] designationTypes = {"Student", "Faculty", "Emergency", "VIP"};
 		String[][] slotArrays = {studentSlots, facultySlots, emergencySlots, vipSlots};
