@@ -34,7 +34,7 @@ public class ParkingLotApp extends JFrame {
         // Set Layout for the main panel
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(6, 2, 15, 15));
-        mainPanel.setBackground(new Color(240, 240, 240));  // Light grey background
+        mainPanel.setBackground(new Color(0, 0, 0));  // Light grey background
 
         // Create buttons with custom icons and hover effects
         JButton studentButton = createButton("Park as Student", null); // Change null with image path if needed
@@ -192,7 +192,7 @@ public class ParkingLotApp extends JFrame {
     private JLabel createStatusLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        label.setForeground(Color.BLACK);
+        label.setForeground(Color.WHITE);
         return label;
     }
 	private String getParkingStatus(String[] slots) {
